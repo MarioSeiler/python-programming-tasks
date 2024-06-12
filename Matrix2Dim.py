@@ -11,10 +11,17 @@ class Matrix2Dim:
         Important: the dimensions must be greater or equal to 1.
         :param elements: content of the matrix (list of lists of elements).
         """
+        if dimensions[0] < 1 or dimensions[1] < 1:
+            raise ValueError("The dimensions must be greater or equal to 1.")
         if elements is None:
             elements = []
         self.dimensions = dimensions
         self.elements = elements
+
+        # check if every element in the list is a number in one line
+        if not all([all([isinstance(element, (int, float)) for element in row]) for row in self.elements]):
+            raise ValueError("The elements of the matrix must be numbers.")
+
 
     def initialize(self, value: float) -> None:
         """
@@ -46,6 +53,8 @@ class Matrix2Dim:
         Performs the matrix transposition based on swapping row and column.
         :return: the transposed matrix.
         """
+        if not self.is_coherent():
+            raise ValueError("The matrix is not coherent.")
         self.elements = [[
             self.elements[j][i] for j in range(self.dimensions[0])]
             for i in range(self.dimensions[1])]
@@ -104,11 +113,9 @@ class Matrix2Dim:
 def main():
     matrix = Matrix2Dim((2, 3), [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]])
     print(matrix)
-    print(matrix.is_symmetric())
-    print(matrix.total())
-    print(matrix.average())
-    print(matrix.stddeviation())
-    print(matrix.is_coherent())
+    matrix2 = Matrix2Dim((3, 3))
+    matrix2.initialize(0.0)
+    print(matrix2)
 
 
 if __name__ == "__main__":

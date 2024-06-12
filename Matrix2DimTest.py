@@ -10,6 +10,28 @@ class Matrix2DimTest(unittest.TestCase):
     self.matrix3 = Matrix2Dim((2, 1), [[1.0], [2.0]])
     self.matrix4 = Matrix2Dim((2, 2), [[0.0, 1.0], [1.0, 2.0]])
     return super().setUp()
+  
+
+  def test_initialize(self):
+    matrix = Matrix2Dim((2, 3))
+    matrix.initialize(2.0)
+    self.assertEqual(matrix.elements, [[2.0, 2.0, 2.0], [2.0, 2.0, 2.0]])
+
+  def test_getitem(self):
+    self.assertEqual(self.matrix1.elements[0][0], 0.0)
+    self.assertEqual(self.matrix1.elements[1][1], 4.0)
+    self.assertEqual(self.matrix1.elements[1][2], 5.0)
+
+  def test_setitem(self):
+    self.matrix1.elements[0][0] = 1.0
+    self.assertEqual(self.matrix1.elements[0][0], 1.0)
+
+  def test_str(self):
+    self.assertEqual(str(self.matrix1),
+"""(2, 3)
+|0.0||1.0||2.0|
+|3.0||4.0||5.0|
+""") 
 
   def test_transpose(self):
     matrix1_transposed = self.matrix1
@@ -40,7 +62,6 @@ class Matrix2DimTest(unittest.TestCase):
     self.assertEqual(self.matrix4.total(), 4.0)
 
   def test_average(self):
-
     self.assertEqual(self.matrix1.average(), 2.5)
     self.assertEqual(self.matrix2.average(), 2.5)
     self.assertEqual(self.matrix3.average(), 1.5)
@@ -55,8 +76,11 @@ class Matrix2DimTest(unittest.TestCase):
   def test_is_coherent(self):
     self.assertTrue(self.matrix1.is_coherent())
     self.assertTrue(self.matrix2.is_coherent())
-    self.assertTrue(self.matrix3.is_coherent())
-    self.assertTrue(self.matrix4.is_coherent())
+
+    # Test for incoherent matrix
+    self.assertFalse(Matrix2Dim((1, 2), [[1], [1]]).is_coherent())
+    self.assertFalse(Matrix2Dim((2, 3), [[1], [1]]).is_coherent())
+
 
   def tearDown(self) -> None:
     return super().tearDown()
